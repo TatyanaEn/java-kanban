@@ -1,6 +1,7 @@
 package ru.practicum.java_kanban.model;
 
 import java.util.Objects;
+import java.util.Random;
 
 public class Task {
 
@@ -8,6 +9,7 @@ public class Task {
     private String description;
     private int id;
     protected StatusTask status;
+
 
     public String getName() {
         return name;
@@ -25,6 +27,17 @@ public class Task {
         return status;
     }
 
+    public Task(String name, String description,  StatusTask status) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.id = new Random().nextInt();
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -33,13 +46,6 @@ public class Task {
         this.description = description;
     }
 
-
-    public Task(String name, String description, int id, StatusTask status) {
-        this.name = name;
-        this.description = description;
-        this.id = id;
-        this.status = status;
-    }
 
     @Override
     public String toString() {
@@ -56,7 +62,7 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        if ( Objects.equals(id, task.id))
+        if (Objects.equals(id, task.id))
             return true;
         return Objects.equals(name, task.name) &&
                 Objects.equals(description, task.description) &&

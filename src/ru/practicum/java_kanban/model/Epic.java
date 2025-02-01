@@ -5,14 +5,15 @@ import java.util.HashMap;
 
 public class Epic extends Task{
 
-    private HashMap<Integer, Subtask> subtasks;
+    private ArrayList<Subtask> subtasks;
 
-    public Epic(String name, String description, int id) {
-        super(name, description, id, StatusTask.NEW);
-        subtasks = new HashMap<>();
+
+    public Epic(String name, String description) {
+        super(name, description, StatusTask.NEW);
+        subtasks = new ArrayList<>();
     }
 
-    public HashMap<Integer, Subtask> getSubtasks() {
+    public ArrayList<Subtask> getSubtasks() {
         return subtasks;
     }
 
@@ -22,15 +23,22 @@ public class Epic extends Task{
                 if (!subtask.getEpic().equals(this)) {
                     subtask.getEpic().deleteSubtask(subtask);
                 }
-            subtasks.put(subtask.getId(), subtask);
+            if (!subtasks.contains(subtask)) {
+                subtasks.add(subtask);
+            } else {
+                int indexToReplace = subtasks.indexOf(subtask);
+                if (indexToReplace != -1) {
+                    subtasks.set(indexToReplace, subtask);
+                }
+            }
             subtask.setEpic(this);
             calculateStatus();
         }
     }
 
     public void deleteSubtask(Subtask subtask){
-        if (subtasks.containsValue(subtask)) {
-            subtasks.remove(subtask.getId());
+        if (subtasks.contains(subtask)) {
+            subtasks.remove(subtask);
             calculateStatus();
         }
     }
@@ -45,7 +53,7 @@ public class Epic extends Task{
             this.status = StatusTask.NEW;
             return;
         }
-        for (Subtask item : subtasks.values()) {
+        for (Subtask item : subtasks) {
             if (item.getStatus().equals(StatusTask.DONE)) {
                 countDone ++;
             }
@@ -55,7 +63,7 @@ public class Epic extends Task{
             return;
         }
         int countNew = 0;
-        for (Subtask item : subtasks.values()) {
+        for (Subtask item : subtasks) {
             if (item.getStatus().equals(StatusTask.NEW)) {
                 countNew ++;
             }
@@ -76,8 +84,8 @@ public class Epic extends Task{
                 "', status = " + this.getStatus() +
                 ", subtasks=[";
         String resultSubtask = "";
-        for (Subtask subtask : subtasks.values()) {
-            if (resultSubtask.equals(""))
+        for (Subtask subtask : subtasks) {
+            if (!resultSubtask.equals(""))
                 resultSubtask = resultSubtask + ", ";
             resultSubtask = resultSubtask + subtask.toString();
         }

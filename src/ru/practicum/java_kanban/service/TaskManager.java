@@ -5,11 +5,10 @@ import ru.practicum.java_kanban.model.Subtask;
 import ru.practicum.java_kanban.model.Task;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 public class TaskManager {
-    private static int count = 0;
+    private int count = 0;
 
     private HashMap<Integer, Task> tasks;
     private HashMap<Integer, Subtask> subtasks;
@@ -22,16 +21,29 @@ public class TaskManager {
     }
 
 
-    public Collection<Task> getTasks() {
-        return tasks.values();
+    public ArrayList<Task> getTasks() {
+        ArrayList<Task> result = new ArrayList<>();
+        for (Task task : tasks.values()) {
+            result.add(task);
+        }
+        return result;
     }
 
-    public Collection<Subtask> getSubtasks() {
-        return subtasks.values();
+    public ArrayList<Subtask> getSubtasks() {
+        ArrayList<Subtask> result = new ArrayList<>();
+        for (Subtask subtask : subtasks.values()) {
+            result.add(subtask);
+        }
+        return result;
     }
 
-    public Collection<Epic> getEpics() {
-        return epics.values();
+    public ArrayList<Epic> getEpics() {
+        ArrayList<Epic> result = new ArrayList<>();
+        for (Epic epic : epics.values()) {
+            result.add(epic);
+        }
+        return result;
+
     }
 
     public void deleteTasks() {
@@ -39,10 +51,18 @@ public class TaskManager {
     }
 
     public void deleteSubtasks() {
+            for (Subtask subtask : subtasks.values()) {
+                subtask.getEpic().deleteSubtask(subtask);
+            }
             subtasks.clear();
     }
 
     public void deleteEpics() {
+            for (Epic epic : epics.values()){
+                for (Subtask subtask : epic.getSubtasks()) {
+                    subtasks.remove(subtask.getId());
+                }
+            }
             epics.clear();
     }
 
@@ -58,24 +78,26 @@ public class TaskManager {
         return epics.get(id);
     }
 
-    public int getNewId() {
-        count++;
-        return count;
-    }
 
     public void createTask(Task task) {
-        if (task != null)
+        if (task != null) {
+            task.setId(getNewId());
             tasks.put(task.getId(), task);
+        }
     }
 
     public void createSubtask(Subtask subtask) {
-        if (subtask != null)
+        if (subtask != null) {
+            subtask.setId(getNewId());
             subtasks.put(subtask.getId(), subtask);
+        }
     }
 
     public void createEpic(Epic epic) {
-        if (epic != null)
+        if (epic != null) {
+            epic.setId(getNewId());
             epics.put(epic.getId(), epic);
+        }
     }
 
     public void updateTask(Task task) {
@@ -118,21 +140,26 @@ public class TaskManager {
         if (epics == null)
             return;
         if (epics.containsKey(id)) {
-            HashMap<Integer, Subtask> subtaskList = epics.get(id).getSubtasks();
+            ArrayList<Subtask> subtaskList = epics.get(id).getSubtasks();
 
-            for (int itemId : subtaskList.keySet()) {
-                subtasks.remove(itemId);
+            for (Subtask item : subtaskList) {
+                subtasks.remove(item.getId());
             }
             epics.remove(id);
         }
 
     }
 
-    public Collection<Subtask> getSubtasksFromEpic(Epic epic) {
+    public ArrayList<Subtask> getSubtasksFromEpic(Epic epic) {
         if (epic != null)
-            return epic.getSubtasks().values();
+            return epic.getSubtasks();
         else
             return null;
+    }
+
+    private int getNewId() {
+        count++;
+        return count;
     }
 
 }

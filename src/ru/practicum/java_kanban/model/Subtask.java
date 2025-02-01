@@ -1,17 +1,20 @@
 package ru.practicum.java_kanban.model;
 
+import java.util.ArrayList;
+
 public class Subtask extends Task{
     private Epic epic; // связь с эпиком-родителем
 
     // 2 конструктора
     //1ый без указания эпика-родителя
-    public Subtask(String name, String description, int id,  StatusTask statusTask) {
-        super(name, description, id, statusTask);
+    public Subtask(String name, String description, StatusTask statusTask) {
+        super(name, description, statusTask);
     }
 
+
     //2ой с передачей в параметры эпика- родителя
-    public Subtask(String name, String description, int id,  StatusTask statusTask, Epic epic) {
-        super(name, description, id, statusTask);
+    public Subtask(String name, String description,   StatusTask statusTask, Epic epic) {
+        super(name, description, statusTask);
         if (epic != null) {
             this.epic = epic;
             epic.addSubtask(this);
@@ -35,6 +38,12 @@ public class Subtask extends Task{
                     epic.addSubtask(this);
                 }
         }
+    }
+    @Override
+    public void setId(int id) {
+        epic.deleteSubtask(this);
+        super.setId(id);
+        epic.addSubtask(this);
     }
 
     @Override
