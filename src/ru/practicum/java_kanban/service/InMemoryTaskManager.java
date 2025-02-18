@@ -188,23 +188,9 @@ public class InMemoryTaskManager implements TaskManager {
             return null;
     }
 
-    public List getHistory() {
+    @Override
+    public List<Task> getHistory() {
         return historyManager.getHistory();
     }
 
-
-
-    /*@Override
-    public List<Task> getHistory() {
-        return historyList;
-    }
-
-    private  <T extends Task> void addTaskToHistoryList(T task) {
-        if (task != null) {
-            if (historyList.size() >= 10) {
-                historyList.remove(0);
-            }
-            historyList.add(task);
-        }
-    }*/
 }
