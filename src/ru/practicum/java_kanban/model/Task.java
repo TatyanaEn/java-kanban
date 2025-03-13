@@ -34,6 +34,12 @@ public class Task {
         this.id = new Random().nextInt();
     }
 
+    public Task(Task original) {
+        this.name = original.name;
+        this.description = original.description;
+        this.status = original.status;
+        this.id = original.id;
+    }
     public void setId(int id) {
         this.id = id;
     }

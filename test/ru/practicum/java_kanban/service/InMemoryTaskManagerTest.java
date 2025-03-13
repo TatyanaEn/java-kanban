@@ -1,6 +1,7 @@
 package ru.practicum.java_kanban.service;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.practicum.java_kanban.model.Epic;
 import ru.practicum.java_kanban.model.StatusTask;
@@ -9,14 +10,13 @@ import ru.practicum.java_kanban.model.Task;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
     private static InMemoryTaskManager taskManager;
 
-    @BeforeAll
-    static void beforeAll() {
+    @BeforeEach
+    void BeforeEach() {
         taskManager = (InMemoryTaskManager) Managers.getDefault();
     }
 
@@ -25,8 +25,7 @@ class InMemoryTaskManagerTest {
 
         Task task = new Task("Помыть машину", "Записаться на мойку или помыть машину самому",
                 StatusTask.NEW);
-        taskManager.createTask(task);
-        final int taskId = task.getId();
+        final int taskId = taskManager.createTask(task);
 
         final Task savedTask = taskManager.getTaskById(taskId);
         assertNotNull(savedTask, "Задача не найдена.");
@@ -44,16 +43,16 @@ class InMemoryTaskManagerTest {
     void addNewEpic() {
 
         Epic epic1 = new Epic("Важный эпик 1", "очень очень очень важный список задач");
+        final int epicId1 = taskManager.createEpic(epic1);
+
         Subtask subtask1 = new Subtask("Подзадача1", "Описание подзадачи1",
-                StatusTask.NEW, epic1);
+                StatusTask.NEW, taskManager.getEpicById(epicId1));
         Subtask subtask2 = new Subtask("Подзадача2", "Описание подзадачи2",
-                StatusTask.NEW, epic1);
-        taskManager.createEpic(epic1);
+                StatusTask.NEW, taskManager.getEpicById(epicId1));
         taskManager.createSubtask(subtask1);
         taskManager.createSubtask(subtask2);
 
-        final int epicId = epic1.getId();
-        final Task savedEpic = taskManager.getEpicById(epicId);
+        final Task savedEpic = taskManager.getEpicById(epicId1);
         assertNotNull(savedEpic, "Задача не найдена.");
 
         assertEquals(epic1, savedEpic, "Задачи не совпадают.");
@@ -69,16 +68,17 @@ class InMemoryTaskManagerTest {
     void addNewSubTask() {
 
         Epic epic1 = new Epic("Важный эпик 1", "очень очень очень важный список задач");
-        Subtask subtask1 = new Subtask("Подзадача1", "Описание подзадачи1",
-                StatusTask.NEW, epic1);
-        Subtask subtask2 = new Subtask("Подзадача2", "Описание подзадачи2",
-                StatusTask.NEW, epic1);
-        taskManager.createEpic(epic1);
-        taskManager.createSubtask(subtask1);
-        taskManager.createSubtask(subtask2);
+        int epicId1 = taskManager.createEpic(epic1);
 
-        final int subtaskId = subtask1.getId();
-        final Subtask savedSubtask= taskManager.getSubtaskById(subtaskId);
+        Subtask subtask1 = new Subtask("Подзадача1", "Описание подзадачи1",
+                StatusTask.NEW, taskManager.getEpicById(epicId1));
+        Subtask subtask2 = new Subtask("Подзадача2", "Описание подзадачи2",
+                StatusTask.NEW, taskManager.getEpicById(epicId1));
+
+        int subTaskId1 = taskManager.createSubtask(subtask1);
+        int subTaskId2 = taskManager.createSubtask(subtask2);
+
+        final Subtask savedSubtask= taskManager.getSubtaskById(subTaskId1);
         assertNotNull(savedSubtask, "Задача не найдена.");
 
         assertEquals(subtask1, savedSubtask, "Задачи не совпадают.");
@@ -88,6 +88,29 @@ class InMemoryTaskManagerTest {
         assertNotNull(subtasks, "Задачи не возвращаются.");
         assertEquals(2, subtasks.size(), "Неверное количество задач.");
         assertEquals(subtask1, subtasks.get(0), "Задачи не совпадают.");
+    }
+
+    @Test
+    void deleteSubTask() {
+        Epic epic1 = new Epic("Важный эпик 1", "очень очень очень важный список задач");
+        int epicId1 = taskManager.createEpic(epic1);
+
+        Subtask subtask1 = new Subtask("Подзадача1", "Описание подзадачи1",
+                StatusTask.NEW, taskManager.getEpicById(epicId1));
+        Subtask subtask2 = new Subtask("Подзадача2", "Описание подзадачи2",
+                StatusTask.NEW, taskManager.getEpicById(epicId1));
+
+        int subTaskId1 = taskManager.createSubtask(subtask1);
+        int subTaskId2 = taskManager.createSubtask(subtask2);
+        taskManager.deleteSubtaskById(subTaskId1);
+
+
+        final int subtaskId = subtask1.getId();
+        final Subtask savedSubtask= taskManager.getSubtaskById(subtaskId);
+        assertNull(savedSubtask, "Задача найдена.");
+
+        assertEquals(false,taskManager.getEpicById(epicId1).getSubtasks().contains(subtask1)
+                ,"Внутри эрика есть неактуальная подзадача");
     }
 
 }

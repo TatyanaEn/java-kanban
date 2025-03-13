@@ -21,6 +21,24 @@ public class Subtask extends Task{
         }
     }
 
+    public Subtask(Subtask original, Epic epic) {
+        super(original.getName(), original.getDescription(), original.getStatus());
+        setId(original.getId());
+        if (epic != null) {
+            this.epic = epic;
+            epic.addSubtask(this);
+        }
+    }
+
+    public Subtask(Subtask original) {
+        super(original.getName(), original.getDescription(), original.getStatus());
+        if (original.epic != null) {
+            this.epic = original.epic;
+            original.epic.addSubtask(this);
+        }
+        setId(original.getId());
+    }
+
     public Epic getEpic() {
         return epic;
     }
@@ -41,9 +59,11 @@ public class Subtask extends Task{
     }
     @Override
     public void setId(int id) {
-        epic.deleteSubtask(this);
+        if (epic != null)
+            epic.deleteSubtask(this);
         super.setId(id);
-        epic.addSubtask(this);
+        if (epic != null)
+            epic.addSubtask(this);
     }
 
     @Override
