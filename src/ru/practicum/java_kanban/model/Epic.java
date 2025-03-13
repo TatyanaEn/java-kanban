@@ -1,7 +1,6 @@
 package ru.practicum.java_kanban.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Epic extends Task {
 
