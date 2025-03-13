@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class InMemoryHistoryManager <T extends Task> implements HistoryManager{
+public class InMemoryHistoryManager<T extends Task> implements HistoryManager {
     private Node<T> head;
     private Node<T> tail;
     private HashMap<Integer, Node> historyHashMap;
@@ -29,7 +29,7 @@ public class InMemoryHistoryManager <T extends Task> implements HistoryManager{
     }
 
     @Override
-    public void remove(int id){
+    public void remove(int id) {
         removeNode(historyHashMap.get(id));
     }
 
@@ -39,7 +39,7 @@ public class InMemoryHistoryManager <T extends Task> implements HistoryManager{
         return getTasks();
     }
 
-    public void linkLast(T t){
+    public void linkLast(T t) {
         Node<T> tmpTail = this.tail;
         Node<T> newNode = new Node(t);
         this.tail = newNode;
@@ -63,28 +63,28 @@ public class InMemoryHistoryManager <T extends Task> implements HistoryManager{
         return tasks;
     }
 
-    public void removeNode(Node node){
+    public void removeNode(Node node) {
         if (node == null) return;
-        Node  nextNode = node.getNext();
-        Node  prevNode = node.getPrevious();
-        if (node == head && node == tail){
-           head = null;
-           tail = null;
-           --this.size;
+        Node nextNode = node.getNext();
+        Node prevNode = node.getPrevious();
+        if (node == head && node == tail) {
+            head = null;
+            tail = null;
+            --this.size;
         } else if (node == head && node != tail) {
-               nextNode.setPrevious(null);
-               head = nextNode;
-               --this.size;
+            nextNode.setPrevious(null);
+            head = nextNode;
+            --this.size;
         } else if (node == tail && node != head) {
             prevNode.setPrevious(null);
             tail = prevNode;
-           --this.size;
+            --this.size;
         } else {
-           if (prevNode != null)
-               prevNode.setNext(nextNode);
-           if (nextNode != null)
-               nextNode.setPrevious(prevNode);
-           --this.size;
+            if (prevNode != null)
+                prevNode.setNext(nextNode);
+            if (nextNode != null)
+                nextNode.setPrevious(prevNode);
+            --this.size;
         }
     }
 

@@ -13,7 +13,7 @@ public class Main {
 
         TaskManager taskManager = new InMemoryTaskManager();
 
-       Task task1 = new Task("Помыть машину", "Записаться на мойку или помыть машину самому",
+        Task task1 = new Task("Помыть машину", "Записаться на мойку или помыть машину самому",
                 StatusTask.NEW);
         Task task2 = new Task("Заехать в МФЦ", "Заехать в МФЦ за документами (окно №3)",
 
@@ -30,13 +30,13 @@ public class Main {
 
         Subtask subtask3 = new Subtask("Подзадача3", "Описание подзадачи3",
                 StatusTask.NEW, epic1);
-        int id3 =taskManager.createEpic(epic1);
-        int id4 =taskManager.createSubtask(subtask1);
-        int id5 =taskManager.createSubtask(subtask2);
-        int id6 =taskManager.createSubtask(subtask3);
+        int id3 = taskManager.createEpic(epic1);
+        int id4 = taskManager.createSubtask(subtask1);
+        int id5 = taskManager.createSubtask(subtask2);
+        int id6 = taskManager.createSubtask(subtask3);
 
         Epic epic2 = new Epic("Эпик без подзадачи", "Эпик без подзадачи");
-        int id7 =taskManager.createEpic(epic2);
+        int id7 = taskManager.createEpic(epic2);
 
 
         taskManager.getTaskById(id1);

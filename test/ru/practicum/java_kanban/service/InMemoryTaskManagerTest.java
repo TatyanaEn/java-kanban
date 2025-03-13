@@ -78,7 +78,7 @@ class InMemoryTaskManagerTest {
         int subTaskId1 = taskManager.createSubtask(subtask1);
         int subTaskId2 = taskManager.createSubtask(subtask2);
 
-        final Subtask savedSubtask= taskManager.getSubtaskById(subTaskId1);
+        final Subtask savedSubtask = taskManager.getSubtaskById(subTaskId1);
         assertNotNull(savedSubtask, "Задача не найдена.");
 
         assertEquals(subtask1, savedSubtask, "Задачи не совпадают.");
@@ -106,11 +106,11 @@ class InMemoryTaskManagerTest {
 
 
         final int subtaskId = subtask1.getId();
-        final Subtask savedSubtask= taskManager.getSubtaskById(subtaskId);
+        final Subtask savedSubtask = taskManager.getSubtaskById(subtaskId);
         assertNull(savedSubtask, "Задача найдена.");
 
-        assertEquals(false,taskManager.getEpicById(epicId1).getSubtasks().contains(subtask1)
-                ,"Внутри эрика есть неактуальная подзадача");
+        assertEquals(false, taskManager.getEpicById(epicId1).getSubtasks().contains(subtask1)
+                , "Внутри эрика есть неактуальная подзадача");
     }
 
 }

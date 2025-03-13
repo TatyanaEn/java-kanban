@@ -1,6 +1,6 @@
 package ru.practicum.java_kanban.model;
 
-public class Node <T> {
+public class Node<T> {
 
     public T data;
     public Node<T> next;
@@ -11,6 +11,7 @@ public class Node <T> {
         this.next = null;
         this.prev = null;
     }
+
     public T getData() {
         return data;
     }

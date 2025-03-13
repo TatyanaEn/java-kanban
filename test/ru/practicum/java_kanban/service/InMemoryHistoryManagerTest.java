@@ -13,11 +13,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class InMemoryHistoryManagerTest {
     private static InMemoryHistoryManager historyManager;
 
-
     @BeforeEach
     void beforeEach() {
         historyManager = (InMemoryHistoryManager) Managers.getDefaultHistory();
     }
+
     @Test
     void shouldAddTasksToHistoryList() {
         Task task1 = new Task("Помыть машину", "Записаться на мойку или помыть машину самому",
@@ -46,6 +46,7 @@ class InMemoryHistoryManagerTest {
         historyManager.remove(task2.getId());
         assertEquals(List.of(task1, task3), historyManager.getHistory());
     }
+
     @Test
     void shouldReturnNullIfTaskIsEmpty() {
         historyManager.add(null);

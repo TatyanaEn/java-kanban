@@ -1,4 +1,5 @@
 package ru.practicum.java_kanban.model;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

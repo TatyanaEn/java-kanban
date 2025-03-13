@@ -11,7 +11,7 @@ public class Subtask extends Task {
 
 
     //2ой с передачей в параметры эпика- родителя
-    public Subtask(String name, String description,   StatusTask statusTask, Epic epic) {
+    public Subtask(String name, String description, StatusTask statusTask, Epic epic) {
         super(name, description, statusTask);
         if (epic != null) {
             this.epic = epic;
@@ -45,7 +45,7 @@ public class Subtask extends Task {
 
     public void setEpic(Epic epic) {
         if (epic != null)
-            if (!epic.equals(this.epic))  {
+            if (!epic.equals(this.epic)) {
                 if (this.epic != null) {     // если у подзадачи был уже указан эпик , то нужно убрать старую связь
                     if (!this.epic.equals(epic)) {
                         this.epic.deleteSubtask(this);
@@ -53,7 +53,7 @@ public class Subtask extends Task {
                     this.epic = epic;
                     epic.addSubtask(this);
                 }
-        }
+            }
     }
 
     @Override
