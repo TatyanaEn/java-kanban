@@ -1,6 +1,6 @@
 package ru.practicum.java_kanban.model;
 
-public class Subtask extends Task{
+public class Subtask extends Task {
     private Epic epic; // связь с эпиком-родителем
 
     // 2 конструктора
