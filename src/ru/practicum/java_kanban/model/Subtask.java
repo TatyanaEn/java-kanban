@@ -1,7 +1,5 @@
 package ru.practicum.java_kanban.model;
 
-import java.util.ArrayList;
-
 public class Subtask extends Task{
     private Epic epic; // связь с эпиком-родителем
 
@@ -57,6 +55,7 @@ public class Subtask extends Task{
                 }
         }
     }
+
     @Override
     public void setId(int id) {
         if (epic != null)
@@ -74,7 +73,7 @@ public class Subtask extends Task{
                 "', description = '" + this.getDescription() +
                 "', status = " + this.getStatus();
         if (epic != null)
-            result = result + ", epicId=" + epic.getId() +'}';
+            result = result + ", epicId=" + epic.getId() + '}';
         return result;
     }
 }
