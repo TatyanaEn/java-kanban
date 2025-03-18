@@ -1,8 +1,6 @@
 package ru.practicum.java_kanban.model;
 
-import java.util.ArrayList;
-
-public class Subtask extends Task{
+public class Subtask extends Task {
     private Epic epic; // связь с эпиком-родителем
 
     // 2 конструктора
@@ -13,12 +11,30 @@ public class Subtask extends Task{
 
 
     //2ой с передачей в параметры эпика- родителя
-    public Subtask(String name, String description,   StatusTask statusTask, Epic epic) {
+    public Subtask(String name, String description, StatusTask statusTask, Epic epic) {
         super(name, description, statusTask);
         if (epic != null) {
             this.epic = epic;
             epic.addSubtask(this);
         }
+    }
+
+    public Subtask(Subtask original, Epic epic) {
+        super(original.getName(), original.getDescription(), original.getStatus());
+        setId(original.getId());
+        if (epic != null) {
+            this.epic = epic;
+            epic.addSubtask(this);
+        }
+    }
+
+    public Subtask(Subtask original) {
+        super(original.getName(), original.getDescription(), original.getStatus());
+        if (original.epic != null) {
+            this.epic = original.epic;
+            original.epic.addSubtask(this);
+        }
+        setId(original.getId());
     }
 
     public Epic getEpic() {
@@ -29,7 +45,7 @@ public class Subtask extends Task{
 
     public void setEpic(Epic epic) {
         if (epic != null)
-            if (!epic.equals(this.epic))  {
+            if (!epic.equals(this.epic)) {
                 if (this.epic != null) {     // если у подзадачи был уже указан эпик , то нужно убрать старую связь
                     if (!this.epic.equals(epic)) {
                         this.epic.deleteSubtask(this);
@@ -37,13 +53,16 @@ public class Subtask extends Task{
                     this.epic = epic;
                     epic.addSubtask(this);
                 }
-        }
+            }
     }
+
     @Override
     public void setId(int id) {
-        epic.deleteSubtask(this);
+        if (epic != null)
+            epic.deleteSubtask(this);
         super.setId(id);
-        epic.addSubtask(this);
+        if (epic != null)
+            epic.addSubtask(this);
     }
 
     @Override
@@ -54,7 +73,7 @@ public class Subtask extends Task{
                 "', description = '" + this.getDescription() +
                 "', status = " + this.getStatus();
         if (epic != null)
-            result = result + ", epicId=" + epic.getId() +'}';
+            result = result + ", epicId=" + epic.getId() + '}';
         return result;
     }
 }

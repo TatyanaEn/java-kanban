@@ -1,9 +1,8 @@
 package ru.practicum.java_kanban.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class Epic extends Task{
+public class Epic extends Task {
 
     private ArrayList<Subtask> subtasks;
 
@@ -13,11 +12,18 @@ public class Epic extends Task{
         subtasks = new ArrayList<>();
     }
 
-    public ArrayList<Subtask> getSubtasks() {
-        return subtasks;
+    public Epic(Epic original) {
+        super(original.getName(), original.getDescription(), StatusTask.NEW);
+        setId(original.getId());
+        subtasks = original.getSubtasks();
     }
 
-    public void addSubtask(Subtask subtask){
+
+    public ArrayList<Subtask> getSubtasks() {
+        return new ArrayList<>(subtasks);
+    }
+
+    public void addSubtask(Subtask subtask) {
         if (subtask != null) {
             if (subtask.getEpic() != null) // если у подзадачи был уже указан эпик , то нужно убрать старую связь
                 if (!subtask.getEpic().equals(this)) {
@@ -36,7 +42,7 @@ public class Epic extends Task{
         }
     }
 
-    public void deleteSubtask(Subtask subtask){
+    public void deleteSubtask(Subtask subtask) {
         if (subtasks.contains(subtask)) {
             subtasks.remove(subtask);
             calculateStatus();
@@ -55,7 +61,7 @@ public class Epic extends Task{
         }
         for (Subtask item : subtasks) {
             if (item.getStatus().equals(StatusTask.DONE)) {
-                countDone ++;
+                countDone++;
             }
         }
         if (countDone == subtasks.size()) {
@@ -65,7 +71,7 @@ public class Epic extends Task{
         int countNew = 0;
         for (Subtask item : subtasks) {
             if (item.getStatus().equals(StatusTask.NEW)) {
-                countNew ++;
+                countNew++;
             }
         }
         if (countNew == subtasks.size()) {
@@ -89,7 +95,7 @@ public class Epic extends Task{
                 resultSubtask = resultSubtask + ", ";
             resultSubtask = resultSubtask + subtask.toString();
         }
-        result = result + resultSubtask +"]}";
+        result = result + resultSubtask + "]}";
         return result;
     }
 

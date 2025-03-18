@@ -27,11 +27,18 @@ public class Task {
         return status;
     }
 
-    public Task(String name, String description,  StatusTask status) {
+    public Task(String name, String description, StatusTask status) {
         this.name = name;
         this.description = description;
         this.status = status;
         this.id = new Random().nextInt();
+    }
+
+    public Task(Task original) {
+        this.name = original.name;
+        this.description = original.description;
+        this.status = original.status;
+        this.id = original.id;
     }
 
     public void setId(int id) {
