@@ -45,7 +45,9 @@ public class InMemoryTaskManager implements TaskManager {
     public ArrayList<Task> getTasks() {
         ArrayList<Task> result = new ArrayList<>();
         for (Task task : tasks.values()) {
-            result.add(new Task(task));
+            Task newTask = new Task(task);
+            newTask.setId(task.getId());
+            result.add(newTask);
         }
         return result;
     }
@@ -75,8 +77,9 @@ public class InMemoryTaskManager implements TaskManager {
     public ArrayList<Epic> getEpics() {
         ArrayList<Epic> result = new ArrayList<>();
         for (Epic epic : epics.values()) {
-
-            result.add(new Epic(epic));
+            Epic newEpic = new Epic(epic);
+            newEpic.setId(epic.getId());
+            result.add(newEpic);
         }
         return result;
 
@@ -133,7 +136,9 @@ public class InMemoryTaskManager implements TaskManager {
     public Task getTaskById(Integer id) {
         if (tasks.get(id) != null) {
             historyManager.add(tasks.get(id));
-            return new Task(tasks.get(id));
+            Task newTask = new Task(tasks.get(id));
+            newTask.setId(id);
+            return newTask;
         } else
             return null;
     }
@@ -148,7 +153,9 @@ public class InMemoryTaskManager implements TaskManager {
     public Subtask getSubtaskById(Integer id) {
         if (subtasks.get(id) != null) {
             historyManager.add(subtasks.get(id));
-            return new Subtask(subtasks.get(id));
+            Subtask newSubtask = new Subtask(subtasks.get(id));
+            newSubtask.setId(id);
+            return newSubtask;
         } else
             return null;
     }
@@ -163,7 +170,9 @@ public class InMemoryTaskManager implements TaskManager {
     public Epic getEpicById(Integer id) {
         if (epics.get(id) != null) {
             historyManager.add(epics.get(id));
-            return new Epic(epics.get(id));
+            Epic newEpic = new Epic(epics.get(id));
+            newEpic.setId(id);
+            return newEpic;
         } else
             return null;
     }
