@@ -59,7 +59,9 @@ public class InMemoryTaskManager implements TaskManager {
     public ArrayList<Subtask> getSubtasks() {
         ArrayList<Subtask> result = new ArrayList<>();
         for (Subtask subtask : subtasks.values()) {
-            result.add(new Subtask(subtask));
+            Subtask newSubTask = new Subtask(subtask);
+            newSubTask.setId(subtask.getId());
+            result.add(newSubTask);
         }
         return result;
     }
@@ -73,6 +75,7 @@ public class InMemoryTaskManager implements TaskManager {
     public ArrayList<Epic> getEpics() {
         ArrayList<Epic> result = new ArrayList<>();
         for (Epic epic : epics.values()) {
+
             result.add(new Epic(epic));
         }
         return result;
