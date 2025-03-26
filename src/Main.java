@@ -3,8 +3,6 @@ import ru.practicum.java_kanban.model.StatusTask;
 import ru.practicum.java_kanban.model.Subtask;
 import ru.practicum.java_kanban.model.Task;
 import ru.practicum.java_kanban.service.FileBackedTaskManager;
-import ru.practicum.java_kanban.service.InMemoryTaskManager;
-import ru.practicum.java_kanban.service.TaskManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +25,7 @@ public class Main {
 
         Epic epic1 = new Epic("Важный эпик 1", "очень очень очень важный список задач", 3);
         int id3 = taskManager.createEpic(epic1);
-       // int id3 = 1;
+        // int id3 = 1;
         Subtask subtask1 = new Subtask("Подзадача1", "Описание подзадачи1",
                 StatusTask.NEW, taskManager.getEpicById(id3), 4);
         Subtask subtask2 = new Subtask("Подзадача2", "Описание подзадачи2",
@@ -49,9 +47,6 @@ public class Main {
         for (Task task : taskManager.getHistory()) {
             System.out.println(task.toString());
         }
-
-
-
 
 
     }
