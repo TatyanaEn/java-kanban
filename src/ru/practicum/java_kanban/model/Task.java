@@ -34,6 +34,7 @@ public class Task {
     public TypeTask getType() {
         return TypeTask.TASK;
     }
+
     public Task(String name, String description, StatusTask status, Integer id) {
         this.name = name;
         this.description = description;

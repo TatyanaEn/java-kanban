@@ -7,7 +7,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
-import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
 
@@ -124,7 +123,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
      * метод создания задачи из строки
      *
      * @param value строковое представление входящих данных файла
-     * @return  созданная задача
+     * @return созданная задача
      */
     private static Task fromString(String value) {
         String[] items = value.split(",");

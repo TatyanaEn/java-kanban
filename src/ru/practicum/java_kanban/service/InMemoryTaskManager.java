@@ -38,7 +38,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     /**
      * метод получения списка задач
-     * @return  ArrayList<Task> срисок задач
+     *
+     * @return ArrayList<Task> срисок задач
      */
     @Override
     public ArrayList<Task> getTasks() {
@@ -51,7 +52,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     /**
      * метод получения списка подзадач
-     * @return  ArrayList<Subtask> срисок подзадач
+     *
+     * @return ArrayList<Subtask> срисок подзадач
      */
     @Override
     public ArrayList<Subtask> getSubtasks() {
@@ -64,7 +66,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     /**
      * метод получения списка эпиков
-     * @return  ArrayList<Epic> срисок эпиков
+     *
+     * @return ArrayList<Epic> срисок эпиков
      */
     @Override
     public ArrayList<Epic> getEpics() {
@@ -121,7 +124,7 @@ public class InMemoryTaskManager implements TaskManager {
      * метод получения задачи по идентификатору
      *
      * @param id идентификатор задачи
-     * @return  задача
+     * @return задача
      */
     @Override
     public Task getTaskById(Integer id) {
@@ -136,7 +139,7 @@ public class InMemoryTaskManager implements TaskManager {
      * метод получения подзадачи по идентификатору
      *
      * @param id идентификатор подзадачи
-     * @return  подзадача
+     * @return подзадача
      */
     @Override
     public Subtask getSubtaskById(Integer id) {
@@ -151,7 +154,7 @@ public class InMemoryTaskManager implements TaskManager {
      * метод получения эпика по идентификатору
      *
      * @param id идентификатор эпика
-     * @return  эпик
+     * @return эпик
      */
     @Override
     public Epic getEpicById(Integer id) {
@@ -166,7 +169,7 @@ public class InMemoryTaskManager implements TaskManager {
      * метод создания(добавления) задачи в менеджере
      *
      * @param task входная задача
-     * @return  идентификатор созданной в менеджере задачи
+     * @return идентификатор созданной в менеджере задачи
      */
     @Override
     public Integer createTask(Task task) {
@@ -195,7 +198,7 @@ public class InMemoryTaskManager implements TaskManager {
      * метод создания(добавления) подзадачи в менеджере
      *
      * @param subtask входная подзадача
-     * @return  идентификатор созданной в менеджере подзадачи
+     * @return идентификатор созданной в менеджере подзадачи
      */
     @Override
     public Integer createSubtask(Subtask subtask) {
@@ -226,7 +229,7 @@ public class InMemoryTaskManager implements TaskManager {
      * метод создания(добавления) эпика в менеджере
      *
      * @param epic входной эпик
-     * @return  идентификатор созданного в менеджере эпика
+     * @return идентификатор созданного в менеджере эпика
      */
     @Override
     public Integer createEpic(Epic epic) {
@@ -337,7 +340,7 @@ public class InMemoryTaskManager implements TaskManager {
     /**
      * метод определения статуса эпика
      *
-     * @param epic  эпик
+     * @param epic эпик
      */
     private void calculateStatus(Epic epic) {
         int countDone = 0;
@@ -370,12 +373,13 @@ public class InMemoryTaskManager implements TaskManager {
         }
         epic.setStatus(StatusTask.IN_PROGRESS);
     }
+
     /**
      * метод определения максимального идентификатора
      *
-     * @param tasks  список задач(подзадач, эпиков)
-     * @param idMax  максимальный идентификатор
-     * @return       новое макисмальное значение
+     * @param tasks список задач(подзадач, эпиков)
+     * @param idMax максимальный идентификатор
+     * @return новое макисмальное значение
      */
     private static <T extends Task> Integer getMaxId(List<T> tasks, Integer idMax) {
         for (T task : tasks) {
