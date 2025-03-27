@@ -1,5 +1,6 @@
 package ru.practicum.java_kanban.service;
 
+import ru.practicum.java_kanban.exception.ManagerSaveException;
 import ru.practicum.java_kanban.model.*;
 
 import java.io.File;
@@ -9,13 +10,6 @@ import java.io.Writer;
 import java.nio.file.Files;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
-
-    public static class ManagerSaveException extends RuntimeException {
-
-        public ManagerSaveException(Throwable e) {
-            super(e);
-        }
-    }
 
     private final String filename;
 
@@ -100,54 +94,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     /**
-     * метод сохранения состояния менеджера в указанном файле
-     */
-    private void save() {
-        try (Writer fileWriter = new FileWriter(filename)) {
-            fileWriter.write("id,type,name,status,description,epic\n");
-            for (Task item : this.getTasks()) {
-                fileWriter.write(item.toString() + '\n');
-            }
-            for (Epic item : this.getEpics()) {
-                fileWriter.write(item.toString() + '\n');
-            }
-            for (Subtask item : this.getSubtasks()) {
-                fileWriter.write(item.toString() + '\n');
-            }
-        } catch (IOException e) {
-            throw new ManagerSaveException(e);
-        }
-    }
-
-    /**
-     * метод создания задачи из строки
-     *
-     * @param value строковое представление входящих данных файла
-     * @return созданная задача
-     */
-    private static Task fromString(String value) {
-        String[] items = value.split(",");
-        Task newTask = null;
-        switch (TypeTask.valueOf(items[1])) {
-            case TASK:
-                newTask = new Task(items[2], items[4], StatusTask.valueOf(items[3]));
-                break;
-            case SUBTASK:
-                newTask = new Subtask(items[2], items[4],
-                        StatusTask.valueOf(items[3]));
-                ((Subtask) newTask).setEpicId(Integer.valueOf(items[5]));
-                break;
-            case EPIC:
-                newTask = new Epic(items[2], items[4]);
-                newTask.setStatus(StatusTask.valueOf(items[3]));
-                break;
-        }
-        if (newTask != null)
-            newTask.setId(Integer.valueOf(items[0]));
-        return newTask;
-    }
-
-    /**
      * метод восстановления данных менеджера из файла
      *
      * @param file файл из которого загружается
@@ -219,4 +165,53 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         }
 
     }
+
+    /**
+     * метод сохранения состояния менеджера в указанном файле
+     */
+    private void save() {
+        try (Writer fileWriter = new FileWriter(filename)) {
+            fileWriter.write("id,type,name,status,description,epic\n");
+            for (Task item : this.getTasks()) {
+                fileWriter.write(item.toString() + '\n');
+            }
+            for (Epic item : this.getEpics()) {
+                fileWriter.write(item.toString() + '\n');
+            }
+            for (Subtask item : this.getSubtasks()) {
+                fileWriter.write(item.toString() + '\n');
+            }
+        } catch (IOException e) {
+            throw new ManagerSaveException(e);
+        }
+    }
+
+    /**
+     * метод создания задачи из строки
+     *
+     * @param value строковое представление входящих данных файла
+     * @return созданная задача
+     */
+    private static Task fromString(String value) {
+        String[] items = value.split(",");
+        Task newTask = null;
+        switch (TypeTask.valueOf(items[1])) {
+            case TASK:
+                newTask = new Task(items[2], items[4], StatusTask.valueOf(items[3]));
+                break;
+            case SUBTASK:
+                newTask = new Subtask(items[2], items[4],
+                        StatusTask.valueOf(items[3]));
+                ((Subtask) newTask).setEpicId(Integer.valueOf(items[5]));
+                break;
+            case EPIC:
+                newTask = new Epic(items[2], items[4]);
+                newTask.setStatus(StatusTask.valueOf(items[3]));
+                break;
+        }
+        if (newTask != null)
+            newTask.setId(Integer.valueOf(items[0]));
+        return newTask;
+    }
+
 }
