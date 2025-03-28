@@ -1,7 +1,8 @@
 package ru.practicum.java_kanban.model;
 
 public class Subtask extends Task {
-    private Epic epic; // связь с эпиком-родителем
+    //private Epic epic; // связь с эпиком-родителем
+    private Integer epicId;
 
     // 2 конструктора
     //1ый без указания эпика-родителя
@@ -14,66 +15,63 @@ public class Subtask extends Task {
     public Subtask(String name, String description, StatusTask statusTask, Epic epic) {
         super(name, description, statusTask);
         if (epic != null) {
-            this.epic = epic;
-            epic.addSubtask(this);
+            this.setEpicId(epic.getId());
+
         }
+    }
+
+    public Subtask(String name, String description, StatusTask statusTask, Epic epic, Integer id) {
+        super(name, description, statusTask, id);
+        if (epic != null) {
+            this.setEpicId(epic.getId());
+
+        }
+    }
+
+    public Subtask(String name, String description, StatusTask statusTask, Integer id) {
+        super(name, description, statusTask, id);
     }
 
     public Subtask(Subtask original, Epic epic) {
         super(original.getName(), original.getDescription(), original.getStatus());
         setId(original.getId());
         if (epic != null) {
-            this.epic = epic;
-            epic.addSubtask(this);
+            this.setEpicId(epic.getId());
+
         }
     }
 
     public Subtask(Subtask original) {
         super(original.getName(), original.getDescription(), original.getStatus());
-        if (original.epic != null) {
-            this.epic = original.epic;
-            original.epic.addSubtask(this);
-        }
+        if (original.epicId != null)
+            this.setEpicId(original.getEpicId());
         setId(original.getId());
     }
 
-    public Epic getEpic() {
-        return epic;
-    }
-
-    // метод для установки связи подзадачи с эпиком
-
-    public void setEpic(Epic epic) {
-        if (epic != null)
-            if (!epic.equals(this.epic)) {
-                if (this.epic != null) {     // если у подзадачи был уже указан эпик , то нужно убрать старую связь
-                    if (!this.epic.equals(epic)) {
-                        this.epic.deleteSubtask(this);
-                    }
-                    this.epic = epic;
-                    epic.addSubtask(this);
-                }
-            }
-    }
-
     @Override
-    public void setId(int id) {
-        if (epic != null)
-            epic.deleteSubtask(this);
+    public void setId(Integer id) {
         super.setId(id);
-        if (epic != null)
-            epic.addSubtask(this);
     }
 
     @Override
     public String toString() {
-        String result = "Subtask{" +
-                "id = " + this.getId() +
-                ", name = '" + this.getName() +
-                "', description = '" + this.getDescription() +
-                "', status = " + this.getStatus();
-        if (epic != null)
-            result = result + ", epicId=" + epic.getId() + '}';
+        String result = super.toString();
+        if (getEpicId() != null)
+            result += "," + getEpicId();
         return result;
     }
+
+    @Override
+    public TypeTask getType() {
+        return TypeTask.SUBTASK;
+    }
+
+    public void setEpicId(Integer epicId) {
+        this.epicId = epicId;
+    }
+
+    public Integer getEpicId() {
+        return this.epicId;
+    }
+
 }
