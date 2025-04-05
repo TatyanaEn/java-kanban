@@ -1,23 +1,27 @@
 package ru.practicum.java_kanban.model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Epic extends Task {
 
     private ArrayList<Integer> subtaskIds;
 
+    private LocalDateTime endTime;
+
     public Epic(String name, String description, Integer id) {
-        super(name, description, StatusTask.NEW, id);
+        super(name, description, StatusTask.NEW, Duration.ofMinutes(0), null, id);
         subtaskIds = new ArrayList<>();
     }
 
     public Epic(String name, String description) {
-        super(name, description, StatusTask.NEW);
+        super(name, description, StatusTask.NEW, Duration.ofMinutes(0), null);
         subtaskIds = new ArrayList<>();
     }
 
     public Epic(Epic original) {
-        super(original.getName(), original.getDescription(), StatusTask.NEW);
+        super(original);
         setId(original.getId());
         subtaskIds = original.getSubtasks();
     }
