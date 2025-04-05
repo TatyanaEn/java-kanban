@@ -20,7 +20,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     private HistoryManager historyManager;
 
-    final private Set<Task> prioritizedTasks = new TreeSet<>(new Comparator<Task>() {
+    private final Set<Task> prioritizedTasks = new TreeSet<>(new Comparator<Task>() {
         @Override
         public int compare(Task t1, Task t2) {
             return t1.getStartTime().compareTo(t2.getStartTime());
