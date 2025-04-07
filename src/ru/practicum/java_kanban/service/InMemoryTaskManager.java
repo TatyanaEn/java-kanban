@@ -113,6 +113,7 @@ public class InMemoryTaskManager implements TaskManager {
             calculateStatus(epics.get(subtask.getEpicId()));
             calculateDuration(epics.get(subtask.getEpicId()));
             calculateStartTime(epics.get(subtask.getEpicId()));
+            calculateEndTime(epics.get(subtask.getEpicId()));
             historyManager.remove(subtask.getId());
             prioritizedTasks.remove(subtask.getId());
         }
@@ -133,6 +134,7 @@ public class InMemoryTaskManager implements TaskManager {
             calculateStatus(epic);
             calculateDuration(epic);
             calculateStartTime(epic);
+            calculateEndTime(epic);
             historyManager.remove(epic.getId());
         }
         epics.clear();
@@ -251,6 +253,7 @@ public class InMemoryTaskManager implements TaskManager {
             calculateStatus(epics.get(newSubtask.getEpicId()));
             calculateDuration(epics.get(newSubtask.getEpicId()));
             calculateStartTime(epics.get(newSubtask.getEpicId()));
+            calculateEndTime(epics.get(newSubtask.getEpicId()));
             addToPrioritizedTasks(newSubtask);
         }
         return newId;
@@ -312,6 +315,7 @@ public class InMemoryTaskManager implements TaskManager {
                     calculateStatus(parentEpic);
                     calculateDuration(parentEpic);
                     calculateStartTime(parentEpic);
+                    calculateEndTime(parentEpic);
                 }
             }
     }
@@ -343,6 +347,7 @@ public class InMemoryTaskManager implements TaskManager {
         calculateStatus(epic);
         calculateDuration(epic);
         calculateStartTime(epic);
+        calculateEndTime(epic);
         prioritizedTasks.remove(subtasks.get(id));
         subtasks.remove(id);
         historyManager.remove(id);
@@ -446,6 +451,25 @@ public class InMemoryTaskManager implements TaskManager {
                 startTime = this.subtasks.get(id).getStartTime();
         }
         epic.setStartTime(startTime);
+    }
+
+    /**
+     * метод определения даты и времени окончания эпика
+     *
+     * @param epic эпик
+     */
+    private void calculateEndTime(Epic epic) {
+        LocalDateTime endTime = null;
+        if (epic != null) {
+            for (Integer id : epic.getSubtasks()) {
+                if (this.subtasks.get(id).getEndTime() != null) {
+                    if (endTime == null || endTime.isBefore(this.subtasks.get(id).getEndTime())) {
+                        endTime = this.subtasks.get(id).getEndTime();
+                    }
+                }
+            }
+        }
+        epic.setEndTime(endTime);
     }
 
     /**
