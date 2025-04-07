@@ -1,39 +1,41 @@
 package ru.practicum.java_kanban.model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Subtask extends Task {
-    //private Epic epic; // связь с эпиком-родителем
     private Integer epicId;
 
     // 2 конструктора
     //1ый без указания эпика-родителя
-    public Subtask(String name, String description, StatusTask statusTask) {
-        super(name, description, statusTask);
+    public Subtask(String name, String description, StatusTask statusTask, Duration duration, LocalDateTime startTime) {
+        super(name, description, statusTask, duration, startTime);
     }
 
 
     //2ой с передачей в параметры эпика- родителя
-    public Subtask(String name, String description, StatusTask statusTask, Epic epic) {
-        super(name, description, statusTask);
+    public Subtask(String name, String description, StatusTask statusTask, Duration duration, LocalDateTime startTime, Epic epic) {
+        super(name, description, statusTask, duration, startTime);
         if (epic != null) {
             this.setEpicId(epic.getId());
 
         }
     }
 
-    public Subtask(String name, String description, StatusTask statusTask, Epic epic, Integer id) {
-        super(name, description, statusTask, id);
+    public Subtask(String name, String description, StatusTask statusTask, Duration duration, LocalDateTime startTime, Epic epic, Integer id) {
+        super(name, description, statusTask, duration, startTime, id);
         if (epic != null) {
             this.setEpicId(epic.getId());
 
         }
     }
 
-    public Subtask(String name, String description, StatusTask statusTask, Integer id) {
-        super(name, description, statusTask, id);
+    public Subtask(String name, String description, StatusTask statusTask, Duration duration, LocalDateTime startTime, Integer id) {
+        super(name, description, statusTask, duration, startTime, id);
     }
 
     public Subtask(Subtask original, Epic epic) {
-        super(original.getName(), original.getDescription(), original.getStatus());
+        super(original);
         setId(original.getId());
         if (epic != null) {
             this.setEpicId(epic.getId());
@@ -42,7 +44,7 @@ public class Subtask extends Task {
     }
 
     public Subtask(Subtask original) {
-        super(original.getName(), original.getDescription(), original.getStatus());
+        super(original);
         if (original.epicId != null)
             this.setEpicId(original.getEpicId());
         setId(original.getId());

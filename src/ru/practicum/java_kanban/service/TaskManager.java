@@ -6,6 +6,7 @@ import ru.practicum.java_kanban.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public interface TaskManager {
     ArrayList<Task> getTasks();
@@ -49,4 +50,6 @@ public interface TaskManager {
     Integer getNewId();
 
     List<Task> getHistory();
+
+    Set<Task> getPrioritizedTasks();
 }

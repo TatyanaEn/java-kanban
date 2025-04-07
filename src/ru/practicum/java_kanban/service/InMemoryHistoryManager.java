@@ -76,7 +76,7 @@ public class InMemoryHistoryManager<T extends Task> implements HistoryManager {
             head = nextNode;
             --this.size;
         } else if (node == tail && node != head) {
-            prevNode.setPrevious(null);
+            prevNode.setNext(null);
             tail = prevNode;
             --this.size;
         } else {
