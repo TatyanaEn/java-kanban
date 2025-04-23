@@ -62,9 +62,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     @Override
-    public void updateTask(Task task) {
-        super.updateTask(task);
+    public Boolean updateTask(Task task) {
+        Boolean result = false;
+        result = super.updateTask(task);
         save();
+        return result;
     }
 
     @Override

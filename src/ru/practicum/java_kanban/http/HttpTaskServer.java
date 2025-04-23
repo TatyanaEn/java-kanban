@@ -47,14 +47,9 @@ public class HttpTaskServer {
 
 
     public static void start() throws IOException {
-        String fileName = System.getProperty("user.home") + File.separator + "listTask.csv";
-        File file = new File(fileName);
-        FileBackedTaskManager manager = new FileBackedTaskManager(fileName);
-        HttpTaskServer httpTaskServer = new HttpTaskServer(manager.loadFromFile(file));
-        httpTaskServer.httpServer = HttpServer.create();
-        httpTaskServer.httpServer.bind(new InetSocketAddress(PORT), 0); // связываем сервер с сетевым портом
-        httpTaskServer.httpServer.createContext("/tasks", new TaskHandler(httpTaskServer.taskManager)); // связываем путь и обработчик
-        //httpServer.createContext("/day", new DayHandler()); // связываем путь и обработчик
+        httpServer = HttpServer.create();
+        httpServer.bind(new InetSocketAddress(PORT), 0); // связываем сервер с сетевым портом
+        httpServer.createContext("/tasks", new TaskHandler(taskManager)); // связываем путь и обработчик
         LocalDateTimeTypeAdapter localDateTimeTypeAdapter = new LocalDateTimeTypeAdapter();
         DurationTypeAdapter durationTypeAdapter = new DurationTypeAdapter();
         gson = new GsonBuilder()
@@ -68,6 +63,15 @@ public class HttpTaskServer {
     }
     public static void main(String[] args) throws IOException {
         start();
+    }
+
+
+    public void stop() {
+        httpServer.stop(1);
+    }
+
+    public Gson getGson() {
+        return this.gson;
     }
 
     static class TaskHandler extends BaseHttpHandler {
@@ -89,6 +93,9 @@ public class HttpTaskServer {
             switch(endpoint) {
                 case CREATE_TASK:
                     handleCreateTask(httpExchange);
+                    break;
+                case UPDATE_TASK:
+                    handleUpdateTask(httpExchange);
                     break;
                 case GET_TASKS:
                     handleGetTasks(httpExchange);
@@ -136,6 +143,18 @@ public class HttpTaskServer {
             Task parsedTask = gson.fromJson(body, new TaskTypeToken().getType());
             Integer idTask = taskManager.createTask(parsedTask);
             if (idTask != -1) {
+                sendGoodResponse(exchange);
+            }
+            else
+                sendHasInteractions(exchange);
+        }
+
+        private void handleUpdateTask(HttpExchange exchange) throws IOException {
+            String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+
+            Task parsedTask = gson.fromJson(body, new TaskTypeToken().getType());
+            Boolean result = taskManager.updateTask(parsedTask);
+            if (result) {
                 sendGoodResponse(exchange);
             }
             else

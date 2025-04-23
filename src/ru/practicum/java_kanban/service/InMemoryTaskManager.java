@@ -216,6 +216,7 @@ public class InMemoryTaskManager implements TaskManager {
                 idMax = getMaxId(getSubtasks(), idMax);
                 idMax = getMaxId(getEpics(), idMax);
                 setNewId(idMax + 1);
+                newTask.setId(idMax + 1);
             }
             tasks.put(newTask.getId(), newTask);
             addToPrioritizedTasks(newTask);
@@ -288,7 +289,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateTask(Task task) {
+    public Boolean updateTask(Task task) {
         if (!checkOnCross(task))
             if (task != null) {
                 Task newTask = new Task(task);
@@ -296,7 +297,9 @@ public class InMemoryTaskManager implements TaskManager {
                 tasks.put(newTask.getId(), newTask);
                 prioritizedTasks.remove(newTask.getId());
                 addToPrioritizedTasks(newTask);
+                return true;
             }
+        return false;
     }
 
     @Override

@@ -33,7 +33,7 @@ public interface TaskManager {
 
     Integer createEpic(Epic epic);
 
-    void updateTask(Task task);
+    Boolean updateTask(Task task);
 
     void updateSubtask(Subtask subtask);
 
