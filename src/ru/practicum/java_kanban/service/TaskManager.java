@@ -35,9 +35,9 @@ public interface TaskManager {
 
     Boolean updateTask(Task task);
 
-    void updateSubtask(Subtask subtask);
+    Boolean updateSubtask(Subtask subtask);
 
-    void updateEpic(Epic epic);
+    Boolean updateEpic(Epic epic);
 
     void deleteTaskById(Integer id);
 
