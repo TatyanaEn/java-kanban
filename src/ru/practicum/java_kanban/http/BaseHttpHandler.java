@@ -167,44 +167,40 @@ public class BaseHttpHandler implements HttpHandler {
 
 
     protected Endpoint getEndpoint(String requestPath, String requestMethod, String body) {
-        try {
-            String[] pathParts = requestPath.split("/");
-            if (requestMethod.equals("GET")) {
-                if (pathParts.length == 2 && pathParts[1].equals("history")) {
-                    return Endpoint.GET_HISTORY;
-                }
-                if (pathParts.length == 2 && pathParts[1].equals("prioritized")) {
-                    return Endpoint.GET_PRIORITIZED;
-                }
-                if (pathParts.length == 2) {
-                    return Endpoint.GET_ITEMS;
-                }
-                if (pathParts.length == 3) {
-                    return Endpoint.GET_ITEM;
-                }
-                if (pathParts.length == 4 && pathParts[3].equals("subtasks")) {
-                    return Endpoint.GET_SUBITEMS;
-                }
+        String[] pathParts = requestPath.split("/");
+        if (requestMethod.equals("GET")) {
+            if (pathParts.length == 2 && pathParts[1].equals("history")) {
+                return Endpoint.GET_HISTORY;
+            }
+            if (pathParts.length == 2 && pathParts[1].equals("prioritized")) {
+                return Endpoint.GET_PRIORITIZED;
+            }
+            if (pathParts.length == 2) {
+                return Endpoint.GET_ITEMS;
+            }
+            if (pathParts.length == 3) {
+                return Endpoint.GET_ITEM;
+            }
+            if (pathParts.length == 4 && pathParts[3].equals("subtasks")) {
+                return Endpoint.GET_SUBITEMS;
+            }
 
 
+        }
+        if (requestMethod.equals("POST")) {
+            JsonElement jsonElement = JsonParser.parseString(body);
+            if (!jsonElement.isJsonObject()) { // проверяем, точно ли мы получили JSON-объект
+                return Endpoint.UNKNOWN;
             }
-            if (requestMethod.equals("POST")) {
-                JsonElement jsonElement = JsonParser.parseString(body);
-                if (!jsonElement.isJsonObject()) { // проверяем, точно ли мы получили JSON-объект
-                    return Endpoint.UNKNOWN;
-                }
-                Task task = this.getGson().fromJson(body, new ru.practicum.java_kanban.http.TaskTypeToken().getType());
-                if (task.getId() == null) {
-                    return Endpoint.CREATE_ITEM;
-                } else {
-                    return Endpoint.UPDATE_ITEM;
-                }
+            Task task = this.getGson().fromJson(body, new ru.practicum.java_kanban.http.TaskTypeToken().getType());
+            if (task.getId() == null) {
+                return Endpoint.CREATE_ITEM;
+            } else {
+                return Endpoint.UPDATE_ITEM;
             }
-            if (requestMethod.equals("DELETE")) {
-                return Endpoint.DELETE_ITEM;
-            }
-        } catch (Exception e) {
-
+        }
+        if (requestMethod.equals("DELETE")) {
+            return Endpoint.DELETE_ITEM;
         }
         return Endpoint.UNKNOWN;
     }
