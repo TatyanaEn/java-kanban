@@ -40,17 +40,17 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void addNewEpic() {
 
-        Epic epic1 = new Epic("Важный эпик 1", "очень очень очень важный список задач");
+        Epic epic1 = new Epic("Важный эпик 1", "очень очень очень важный список задач", 1);
         final int epicId1 = taskManager.createEpic(epic1);
 
         Subtask subtask1 = new Subtask("Подзадача1", "Описание подзадачи1",
                 StatusTask.NEW, Duration.ofMinutes(30),
                 LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
-                taskManager.getEpicById(epicId1));
+                taskManager.getEpicById(epicId1), 2);
         Subtask subtask2 = new Subtask("Подзадача2", "Описание подзадачи2",
                 StatusTask.NEW, Duration.ofMinutes(30),
                 LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
-                taskManager.getEpicById(epicId1));
+                taskManager.getEpicById(epicId1), 3);
         taskManager.createSubtask(subtask1);
         taskManager.createSubtask(subtask2);
 
@@ -111,7 +111,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void deleteSubTask() {
         Epic epic1 = new Epic("Важный эпик 1", "очень очень очень важный список задач");
-        int epicId1 = taskManager.createEpic(epic1);
+        Integer epicId1 = taskManager.createEpic(epic1);
 
         Subtask subtask1 = new Subtask("Подзадача1", "Описание подзадачи1",
                 StatusTask.NEW, Duration.ofMinutes(30),
@@ -122,12 +122,12 @@ abstract class TaskManagerTest<T extends TaskManager> {
                 LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
                 taskManager.getEpicById(epicId1));
 
-        int subTaskId1 = taskManager.createSubtask(subtask1);
-        int subTaskId2 = taskManager.createSubtask(subtask2);
+        Integer subTaskId1 = taskManager.createSubtask(subtask1);
+        Integer subTaskId2 = taskManager.createSubtask(subtask2);
         taskManager.deleteSubtaskById(subTaskId1);
 
 
-        final int subtaskId = subtask1.getId();
+        final Integer subtaskId = subtask1.getId();
         final Subtask savedSubtask = taskManager.getSubtaskById(subtaskId);
         assertNull(savedSubtask, "Подзадача не удалена");
 

@@ -217,6 +217,7 @@ public class InMemoryTaskManager implements TaskManager {
                 idMax = getMaxId(getEpics(), idMax);
                 setNewId(idMax + 1);
                 newTask.setId(idMax + 1);
+                newId = newTask.getId();
             }
             tasks.put(newTask.getId(), newTask);
             addToPrioritizedTasks(newTask);
@@ -249,6 +250,7 @@ public class InMemoryTaskManager implements TaskManager {
                 idMax = getMaxId(getEpics(), idMax);
                 setNewId(idMax + 1);
                 newSubtask.setId(idMax + 1);
+                newId = newSubtask.getId();
             }
             subtasks.put(newSubtask.getId(), newSubtask);
             epics.get(newSubtask.getEpicId()).addSubtask(newSubtask);
@@ -284,6 +286,7 @@ public class InMemoryTaskManager implements TaskManager {
                 idMax = getMaxId(getEpics(), idMax);
                 setNewId(idMax + 1);
                 newEpic.setId(idMax + 1);
+                newId = newEpic.getId();
             }
             epics.put(newEpic.getId(), newEpic);
         }
