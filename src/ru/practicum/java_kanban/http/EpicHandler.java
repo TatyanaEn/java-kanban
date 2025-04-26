@@ -2,27 +2,66 @@ package ru.practicum.java_kanban.http;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 import ru.practicum.java_kanban.model.Epic;
 import ru.practicum.java_kanban.model.Subtask;
 import ru.practicum.java_kanban.service.TaskManager;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class EpicHandler extends AbstractTaskHandler {
+public class EpicHandler extends BaseHttpHandler implements HttpHandler {
 
     public EpicHandler(TaskManager taskManager, Gson gson) {
         super(taskManager, gson);
     }
 
     @Override
+    public void handle(HttpExchange httpExchange) throws IOException {
+        try {
+            System.out.println("Началась обработка  запроса от клиента.");
+            String response;
+
+            // извлеките метод из запроса
+            String method = httpExchange.getRequestMethod();
+            String body = new String(httpExchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+            String[] pathParts = httpExchange.getRequestURI().getPath().split("/");
+            Endpoint endpoint = getEndpoint(httpExchange.getRequestURI().getPath(), method, body);
+            switch (endpoint) {
+                case CREATE_ITEM:
+                    handleCreateItem(httpExchange, body);
+                    break;
+                case UPDATE_ITEM:
+                    handleUpdateItem(httpExchange, body);
+                    break;
+                case GET_ITEMS:
+                    handleGetItems(httpExchange);
+                    break;
+                case GET_ITEM:
+                    handleGetItem(httpExchange);
+                    break;
+                case DELETE_ITEM:
+                    handleDeleteItem(httpExchange);
+                    break;
+                case GET_SUBITEMS:
+                    handleGetSubitems(httpExchange);
+                    break;
+                default:
+                    response = "Вы использовали какой-то другой метод!";
+                    sendUnknownMethod(httpExchange, response);
+            }
+        } catch (Exception e) {
+            sendInternalError(httpExchange);
+        }
+    }
+
     public void handleGetItems(HttpExchange exchange) throws IOException {
         String response = this.getGson().toJson(this.getTaskManager().getEpics());
         sendText(exchange, response);
     }
 
-    @Override
     public void handleGetItem(HttpExchange exchange) throws IOException {
         Optional<Integer> idOpt = getId(exchange);
         if (idOpt.isEmpty()) {
@@ -40,7 +79,6 @@ public class EpicHandler extends AbstractTaskHandler {
         sendNotFound(exchange);
     }
 
-    @Override
     public void handleDeleteItem(HttpExchange exchange) throws IOException {
         Optional<Integer> idOpt = getId(exchange);
         if (idOpt.isEmpty()) {
@@ -53,7 +91,6 @@ public class EpicHandler extends AbstractTaskHandler {
 
     }
 
-    @Override
     public void handleCreateItem(HttpExchange exchange, String body) throws IOException {
         Epic parsedTask = this.getGson().fromJson(body, new EpicTypeToken().getType());
         Integer idEpic = this.getTaskManager().createEpic(parsedTask);
@@ -63,7 +100,6 @@ public class EpicHandler extends AbstractTaskHandler {
             sendHasInteractions(exchange);
     }
 
-    @Override
     public void handleUpdateItem(HttpExchange exchange, String body) throws IOException {
         Epic parsedTask = this.getGson().fromJson(body, new EpicTypeToken().getType());
         Boolean result = this.getTaskManager().updateEpic(parsedTask);
@@ -73,7 +109,6 @@ public class EpicHandler extends AbstractTaskHandler {
             sendHasInteractions(exchange);
     }
 
-    @Override
     public void handleGetSubitems(HttpExchange exchange) throws IOException {
         Optional<Integer> idOpt = getId(exchange);
         if (idOpt.isEmpty()) {
