@@ -71,7 +71,6 @@ public class Task {
         this.status = status;
         this.duration = duration;
         this.startTime = startTime;
-        //this.id = new Random().nextInt();
         this.id = null;
     }
 

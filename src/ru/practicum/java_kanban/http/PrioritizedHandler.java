@@ -6,7 +6,7 @@ import ru.practicum.java_kanban.service.TaskManager;
 
 import java.io.IOException;
 
-public class PrioritizedHandler extends BaseHttpHandler {
+public class PrioritizedHandler extends AbstractTaskHandler {
     public PrioritizedHandler(TaskManager taskManager, Gson gson) {
         super(taskManager, gson);
     }

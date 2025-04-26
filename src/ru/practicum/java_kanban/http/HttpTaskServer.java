@@ -2,6 +2,7 @@ package ru.practicum.java_kanban.http;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import ru.practicum.java_kanban.TypeAdapter.DurationTypeAdapter;
 import ru.practicum.java_kanban.TypeAdapter.LocalDateTimeTypeAdapter;
@@ -41,7 +42,7 @@ public class HttpTaskServer {
 
         httpServer = HttpServer.create();
         httpServer.bind(new InetSocketAddress(PORT), 0); // связываем сервер с сетевым портом
-        httpServer.createContext("/tasks", new TaskHandler(taskManager, gson)); // связываем путь и обработчик
+        httpServer.createContext("/tasks", (HttpHandler) new TaskHandler(taskManager, gson)); // связываем путь и обработчик
         httpServer.createContext("/subtasks", new SubtaskHandler(taskManager, gson)); // связываем путь и обработчик
         httpServer.createContext("/epics", new EpicHandler(taskManager, gson)); // связываем путь и обработчик
         httpServer.createContext("/history", new HistoryHandler(taskManager, gson)); // связываем путь и обработчик

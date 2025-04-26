@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class EpicHandler extends BaseHttpHandler {
+public class EpicHandler extends AbstractTaskHandler {
 
     public EpicHandler(TaskManager taskManager, Gson gson) {
         super(taskManager, gson);

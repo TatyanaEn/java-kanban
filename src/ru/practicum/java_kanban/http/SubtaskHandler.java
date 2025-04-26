@@ -8,7 +8,7 @@ import ru.practicum.java_kanban.service.TaskManager;
 import java.io.IOException;
 import java.util.Optional;
 
-public class SubtaskHandler extends BaseHttpHandler {
+public class SubtaskHandler extends AbstractTaskHandler {
 
     public SubtaskHandler(TaskManager taskManager, Gson gson) {
         super(taskManager, gson);

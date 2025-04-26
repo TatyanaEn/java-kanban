@@ -6,7 +6,7 @@ import ru.practicum.java_kanban.service.TaskManager;
 
 import java.io.IOException;
 
-public class HistoryHandler extends BaseHttpHandler {
+public class HistoryHandler extends AbstractTaskHandler {
     public HistoryHandler(TaskManager taskManager, Gson gson) {
         super(taskManager, gson);
     }
