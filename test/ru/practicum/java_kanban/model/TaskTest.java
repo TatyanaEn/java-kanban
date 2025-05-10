@@ -15,10 +15,10 @@ class TaskTest {
     public void shouldBeEqualTasksById() {
         Task task1 = new Task("Помыть машину", "Записаться на мойку или помыть машину самому", StatusTask.NEW,
                 Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
+                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")), 1);
         Task task2 = new Task("Заехать в МФЦ", "Заехать в МФЦ за документами (окно №3)", StatusTask.NEW,
                 Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
+                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")), 2);
         task1.setId(task2.getId());
         Assertions.assertEquals(task1, task2);
     }

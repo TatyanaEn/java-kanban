@@ -1,6 +1,5 @@
 package ru.practicum.java_kanban.service;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.practicum.java_kanban.model.Epic;
 import ru.practicum.java_kanban.model.StatusTask;
@@ -17,12 +16,14 @@ import static org.junit.jupiter.api.Assertions.*;
 abstract class TaskManagerTest<T extends TaskManager> {
     protected T taskManager;
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+
     @Test
     void addNewTask() {
 
+
         Task task = new Task("Помыть машину", "Записаться на мойку или помыть машину самому",
                 StatusTask.NEW, Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
+                LocalDateTime.parse("04.04.2025 11:00", DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
         final int taskId = taskManager.createTask(task);
 
         final Task savedTask = taskManager.getTaskById(taskId);
@@ -40,17 +41,17 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void addNewEpic() {
 
-        Epic epic1 = new Epic("Важный эпик 1", "очень очень очень важный список задач");
+        Epic epic1 = new Epic("Важный эпик 1", "очень очень очень важный список задач", 1);
         final int epicId1 = taskManager.createEpic(epic1);
 
         Subtask subtask1 = new Subtask("Подзадача1", "Описание подзадачи1",
                 StatusTask.NEW, Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
-                taskManager.getEpicById(epicId1));
+                LocalDateTime.parse("04.04.2025 11:00", DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+                taskManager.getEpicById(epicId1), 2);
         Subtask subtask2 = new Subtask("Подзадача2", "Описание подзадачи2",
                 StatusTask.NEW, Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
-                taskManager.getEpicById(epicId1));
+                LocalDateTime.parse("04.04.2025 11:00", DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+                taskManager.getEpicById(epicId1), 3);
         taskManager.createSubtask(subtask1);
         taskManager.createSubtask(subtask2);
 
@@ -74,11 +75,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
         Subtask subtask1 = new Subtask("Подзадача1", "Описание подзадачи1",
                 StatusTask.NEW, Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+                LocalDateTime.parse("04.04.2025 11:00", DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
                 taskManager.getEpicById(epicId1));
         Subtask subtask2 = new Subtask("Подзадача2", "Описание подзадачи2",
                 StatusTask.NEW, Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+                LocalDateTime.parse("04.04.2025 11:00", DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
                 taskManager.getEpicById(epicId1));
 
         int subTaskId1 = taskManager.createSubtask(subtask1);
@@ -99,7 +100,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     void deleteTask() {
         Task task = new Task("Помыть машину", "Записаться на мойку или помыть машину самому",
                 StatusTask.NEW, Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
+                LocalDateTime.parse("04.04.2025 11:00", DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
         final int taskId = taskManager.createTask(task);
         taskManager.deleteTaskById(taskId);
 
@@ -111,23 +112,23 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void deleteSubTask() {
         Epic epic1 = new Epic("Важный эпик 1", "очень очень очень важный список задач");
-        int epicId1 = taskManager.createEpic(epic1);
+        Integer epicId1 = taskManager.createEpic(epic1);
 
         Subtask subtask1 = new Subtask("Подзадача1", "Описание подзадачи1",
                 StatusTask.NEW, Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+                LocalDateTime.parse("04.04.2025 11:00", DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
                 taskManager.getEpicById(epicId1));
         Subtask subtask2 = new Subtask("Подзадача2", "Описание подзадачи2",
                 StatusTask.NEW, Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+                LocalDateTime.parse("04.04.2025 11:00", DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
                 taskManager.getEpicById(epicId1));
 
-        int subTaskId1 = taskManager.createSubtask(subtask1);
-        int subTaskId2 = taskManager.createSubtask(subtask2);
+        Integer subTaskId1 = taskManager.createSubtask(subtask1);
+        Integer subTaskId2 = taskManager.createSubtask(subtask2);
         taskManager.deleteSubtaskById(subTaskId1);
 
 
-        final int subtaskId = subtask1.getId();
+        final Integer subtaskId = subtask1.getId();
         final Subtask savedSubtask = taskManager.getSubtaskById(subtaskId);
         assertNull(savedSubtask, "Подзадача не удалена");
 
@@ -142,11 +143,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
         Subtask subtask1 = new Subtask("Подзадача1", "Описание подзадачи1",
                 StatusTask.NEW, Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+                LocalDateTime.parse("04.04.2025 11:00", DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
                 taskManager.getEpicById(epicId1));
         Subtask subtask2 = new Subtask("Подзадача2", "Описание подзадачи2",
                 StatusTask.NEW, Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+                LocalDateTime.parse("04.04.2025 11:00", DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
                 taskManager.getEpicById(epicId1));
 
         int subTaskId1 = taskManager.createSubtask(subtask1);
@@ -165,11 +166,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
         Subtask subtask1 = new Subtask("Подзадача1", "Описание подзадачи1",
                 StatusTask.NEW, Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+                LocalDateTime.parse("04.04.2025 11:00", DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
                 taskManager.getEpicById(epicId1));
         Subtask subtask2 = new Subtask("Подзадача2", "Описание подзадачи2",
                 StatusTask.NEW, Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+                LocalDateTime.parse("04.04.2025 11:00", DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
                 taskManager.getEpicById(epicId1));
 
         int subTaskId1 = taskManager.createSubtask(subtask1);
@@ -188,11 +189,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
         Subtask subtask1 = new Subtask("Подзадача1", "Описание подзадачи1",
                 StatusTask.DONE, Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+                LocalDateTime.parse("04.04.2025 11:00", DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
                 taskManager.getEpicById(epicId1));
         Subtask subtask2 = new Subtask("Подзадача2", "Описание подзадачи2",
                 StatusTask.DONE, Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+                LocalDateTime.parse("04.04.2025 11:00", DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
                 taskManager.getEpicById(epicId1));
 
         int subTaskId1 = taskManager.createSubtask(subtask1);
@@ -211,11 +212,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
         Subtask subtask1 = new Subtask("Подзадача1", "Описание подзадачи1",
                 StatusTask.NEW, Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+                LocalDateTime.parse("04.04.2025 11:00", DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
                 taskManager.getEpicById(epicId1));
         Subtask subtask2 = new Subtask("Подзадача2", "Описание подзадачи2",
                 StatusTask.DONE, Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+                LocalDateTime.parse("04.04.2025 11:00", DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
                 taskManager.getEpicById(epicId1));
 
         int subTaskId1 = taskManager.createSubtask(subtask1);
@@ -234,11 +235,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
         Subtask subtask1 = new Subtask("Подзадача1", "Описание подзадачи1",
                 StatusTask.IN_PROGRESS, Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+                LocalDateTime.parse("04.04.2025 11:00", DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
                 taskManager.getEpicById(epicId1));
         Subtask subtask2 = new Subtask("Подзадача2", "Описание подзадачи2",
                 StatusTask.IN_PROGRESS, Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+                LocalDateTime.parse("04.04.2025 11:00", DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
                 taskManager.getEpicById(epicId1));
 
         int subTaskId1 = taskManager.createSubtask(subtask1);
@@ -257,14 +258,14 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
         Subtask subtask1 = new Subtask("Подзадача1", "Описание подзадачи1",
                 StatusTask.IN_PROGRESS, Duration.ofMinutes(30),
-                LocalDateTime.parse("04.04.2025 11:00" , DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+                LocalDateTime.parse("04.04.2025 11:00", DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
                 taskManager.getEpicById(epicId1));
         int subTaskId1 = taskManager.createSubtask(subtask1);
 
         final Epic savedEpic = taskManager.getEpicById(epicId1);
         final Subtask savedSubTask = taskManager.getSubtaskById(subTaskId1);
 
-        assertEquals(savedSubTask.getEpicId() , savedEpic.getId(), "Отсуствует связанный эпик");
+        assertEquals(savedSubTask.getEpicId(), savedEpic.getId(), "Отсуствует связанный эпик");
     }
 
     @Test
@@ -273,12 +274,12 @@ abstract class TaskManagerTest<T extends TaskManager> {
         int id3 = taskManager.createEpic(epic1);
 
         Subtask subtask1 = new Subtask("Подзадача1", "Описание подзадачи1",
-                StatusTask.NEW, Duration.ofMinutes(35), LocalDateTime.parse("04.04.2025 14:00" , DATE_TIME_FORMATTER), taskManager.getEpicById(id3), 4);
+                StatusTask.NEW, Duration.ofMinutes(35), LocalDateTime.parse("04.04.2025 14:00", DATE_TIME_FORMATTER), taskManager.getEpicById(id3), 4);
         Subtask subtask2 = new Subtask("Подзадача2", "Описание подзадачи2",
-                StatusTask.NEW, Duration.ofMinutes(20), LocalDateTime.parse("04.04.2025 17:00" , DATE_TIME_FORMATTER), taskManager.getEpicById(id3), 5);
+                StatusTask.NEW, Duration.ofMinutes(20), LocalDateTime.parse("04.04.2025 17:00", DATE_TIME_FORMATTER), taskManager.getEpicById(id3), 5);
 
         Subtask subtask3 = new Subtask("Подзадача3", "Описание подзадачи3",
-                StatusTask.NEW, Duration.ofMinutes(40), LocalDateTime.parse("04.04.2025 14:10" , DATE_TIME_FORMATTER), taskManager.getEpicById(id3), 6);
+                StatusTask.NEW, Duration.ofMinutes(40), LocalDateTime.parse("04.04.2025 14:10", DATE_TIME_FORMATTER), taskManager.getEpicById(id3), 6);
         int id4 = taskManager.createSubtask(subtask1);
         int id5 = taskManager.createSubtask(subtask2);
         int id6 = taskManager.createSubtask(subtask3);

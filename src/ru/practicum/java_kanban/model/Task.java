@@ -4,7 +4,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
-import java.util.Random;
 
 public class Task {
 
@@ -72,7 +71,7 @@ public class Task {
         this.status = status;
         this.duration = duration;
         this.startTime = startTime;
-        this.id = new Random().nextInt();
+        this.id = null;
     }
 
     public Task(Task original) {
